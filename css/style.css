@@ -180,6 +180,14 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
 
+@media only screen and (max-width: 768px) {
+  .sobreMi {
+      border: 1px solid #edf0f3; /* Cambia el grosor del borde para móviles */
+      border-radius: 4px; /* Reduce el radio del borde */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Suaviza la sombra en móviles */
+  }
+}
+
 .projects__links {
   box-shadow: 0 4px 25px rgba(14, 36, 49, 0.15);
   border-radius: 0.55rem;
@@ -298,4 +306,12 @@ body {
 a {
   color: inherit; 
   text-decoration: none; 
+}
+
+.projects__links {
+  transition: transform 0.3s ease; 
+}
+
+.projects__links:hover {
+  transform: scale(1.05); 
 }
