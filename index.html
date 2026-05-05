@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>🎉 Tu sorpresa!</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root {
+  --peach:   #FFB49A;
+  --coral:   #FF8B6B;
+  --sky:     #72C8F0;
+  --skylt:   #B8E4FA;
+  --mint:    #7DDBB4;
+  --mintlt:  #C2F0DC;
+  --lemon:   #FFE566;
+  --lemlt:   #FFF4A8;
+  --pink:    #FF8FC0;
+  --pinklt:  #FFCCE5;
+  --lilac:   #C09AFF;
+  --lilaclt: #E4D5FF;
+  --cream:   #FFFAF4;
+  --text:    #2D1F1F;
+  --textmid: #6B4848;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+html { scroll-behavior:smooth; }
+
+body {
+  min-height: 100vh;
+  background: var(--cream);
+  font-family: 'Nunito', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════
+   ANIMATED BG
+═══════════════════════════ */
+.bg {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden;
+  background: linear-gradient(160deg, #FFF0F8 0%, #F0FAFF 40%, #F4FFF8 70%, #FFFDE8 100%);
+}
+.blob {
+  position:absolute; border-radius:50%; filter:blur(0px);
+  animation: drift var(--d,10s) ease-in-out infinite alternate var(--dl,0s);
+}
+@keyframes drift {
+  0%   { transform: translate(0,0) scale(1); }
+  100% { transform: translate(var(--tx,15px), var(--ty,-20px)) scale(var(--sc,1.05)); }
+}
+
+/* Confetti dots */
+.confetti-dot {
+  position:absolute; border-radius:50%;
+  animation: confDrop var(--cd,8s) linear infinite var(--cdl,0s);
+  opacity:0;
+}
+@keyframes confDrop {
+  0%   { transform: translateY(-20px) rotate(0deg); opacity:0; }
+  10%  { opacity:0.8; }
+  90%  { opacity:0.8; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity:0; }
+}
+
+/* ═══════════════════════════
+   HERO SECTION
+═══════════════════════════ */
+.hero {
+  position: relative; z-index:5;
+  text-align: center;
+  padding: max(56px, env(safe-area-inset-top, 56px)) 24px 0;
+}
+
+.hero-emoji {
+  font-size: 56px; display:block;
+  animation: bounceIn 0.7s cubic-bezier(0.34,1.56,0.64,1) both;
+  filter: drop-shadow(0 4px 12px rgba(255,140,100,0.3));
+}
+@keyframes bounceIn {
+  0%   { transform:scale(0) rotate(-20deg); opacity:0; }
+  100% { transform:scale(1) rotate(0deg);   opacity:1; }
+}
+
+h1 {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(36px, 10vw, 52px);
+  line-height: 1.1;
+  margin: 12px 0 8px;
+  background: linear-gradient(135deg, var(--coral) 0%, var(--pink) 50%, var(--lilac) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: slideUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.15s both;
+  filter: drop-shadow(0 2px 0 rgba(255,100,100,0.15));
+}
+.h1-line2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(28px, 8vw, 42px);
+  background: linear-gradient(135deg, var(--sky) 0%, var(--mint) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: slideUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.25s both;
+}
+@keyframes slideUp {
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+.tagline {
+  font-size: 16px; font-weight:700;
+  color: var(--textmid);
+  margin-top: 8px;
+  animation: slideUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.35s both;
+}
+
+/* emoji rain row */
+.emoji-row {
+  font-size: 22px;
+  letter-spacing: 6px;
+  margin: 16px 0 8px;
+  animation: slideUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.4s both;
+}
+
+/* ═══════════════════════════
+   WALLET SECTION
+═══════════════════════════ */
+.wallet-scene {
+  position: relative; z-index:5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 24px 0;
+  animation: slideUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.5s both;
+}
+
+.wallet-label {
+  font-size: 11px; font-weight:800;
+  letter-spacing: 0.2em; text-transform:uppercase;
+  color: var(--textmid);
+  margin-bottom: 14px;
+  display:flex; align-items:center; gap:8px;
+}
+.wallet-label::before, .wallet-label::after {
+  content:''; flex:1; height:1px; background:rgba(0,0,0,0.1);
+}
+
+/* ── BOARDING PASS ── */
+.bp-outer {
+  width: 100%;
+  max-width: 360px;
+  position: relative;
+}
+
+/* Stack cards behind */
+.bp-back {
+  position:absolute; left:0; right:0;
+  height:16px; border-radius:20px;
+  transition: transform 0.4s ease;
+}
+.bp-back-1 {
+  background: var(--lilac);
+  top:0; margin:0 auto; width:94%;
+  transform:translateY(6px);
+  z-index:1;
+}
+.bp-back-2 {
+  background: var(--pink);
+  top:0; margin:0 auto; width:97%;
+  transform:translateY(3px);
+  z-index:2;
+}
+
+.bp {
+  position:relative; z-index:3;
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:
+    0 8px 32px rgba(100,160,220,0.22),
+    0 2px 8px rgba(0,0,0,0.08);
+  animation: bpDrop 1s cubic-bezier(0.34,1.56,0.64,1) 0.9s both;
+  transform-origin: top center;
+}
+@keyframes bpDrop {
+  0%   { opacity:0; transform:translateY(-30px) rotate(-3deg) scale(0.9); }
+  100% { opacity:1; transform:translateY(0)     rotate(0deg)  scale(1);   }
+}
+
+/* Airline header */
+.bp-head {
+  background: linear-gradient(110deg, #4A9FE0, #72C8F0, #5BC8B0);
+  padding: 14px 18px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.bp-airline {
+  font-size:12px; font-weight:900; color:white;
+  letter-spacing:0.2em; text-transform:uppercase;
+}
+.bp-plane-anim {
+  font-size:22px;
+  animation: flyPlane 3s ease-in-out infinite alternate 1.9s;
+  display:inline-block;
+}
+@keyframes flyPlane {
+  0%   { transform: translateX(0px) translateY(0px) rotate(-5deg); }
+  100% { transform: translateX(8px) translateY(-3px) rotate(5deg); }
+}
+.bp-badge {
+  background:rgba(255,255,255,0.25);
+  border-radius:20px; padding:3px 10px;
+  font-size:10px; font-weight:800; color:white;
+  letter-spacing:0.08em;
+}
+
+/* Route */
+.bp-route {
+  background:white;
+  padding: 18px 18px 10px;
+  display:flex; align-items:center; gap:10px;
+}
+.bp-city-block { flex:1; }
+.bp-city-block.right { text-align:right; }
+.bp-iata {
+  font-family:'Fredoka One',cursive;
+  font-size: 36px; color: #1a5080;
+  line-height:1;
+}
+.bp-city-name { font-size:10px; font-weight:800; color:#6aadcc; text-transform:uppercase; letter-spacing:0.08em; margin-top:2px; }
+.bp-route-center {
+  flex:1.2; display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.bp-plane-row {
+  display:flex; align-items:center; width:100%; gap:4px;
+}
+.bp-dash { flex:1; border-top:1.5px dashed #b0d8f0; }
+.bp-circle { width:7px; height:7px; border-radius:50%; background:#72C8F0; flex-shrink:0; }
+.bp-route-plane { font-size:16px; color:#4A9FE0; }
+.bp-dur { font-size:10px; font-weight:800; color:#9cc8e0; }
+
+/* Fields */
+.bp-fields {
+  background:white;
+  padding:0 18px 14px;
+  display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;
+}
+.bp-field { background:#F0F8FF; border-radius:10px; padding:8px 10px; }
+.bp-field-lbl { font-size:8px; font-weight:800; color:#90c0e0; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:3px; }
+.bp-field-val { font-size:14px; font-weight:900; color:#1a5080; }
+
+/* Tear */
+.bp-tear {
+  background:white;
+  display:flex; align-items:center;
+  padding:0;
+}
+.bp-notch {
+  width:14px; height:14px; border-radius:50%;
+  background:linear-gradient(160deg,#F0F8FF,#ddeef8);
+  flex-shrink:0; box-shadow:inset 0 1px 3px rgba(0,0,0,0.08);
+}
+.bp-notch.l { margin-left:-7px; }
+.bp-notch.r { margin-right:-7px; }
+.bp-dash-line { flex:1; border-top:1.5px dashed #b0d8f0; }
+
+/* Barcode area */
+.bp-barcode-area {
+  background:white;
+  padding:12px 18px 16px;
+  display:flex; align-items:center; gap:12px;
+}
+.bp-bars { display:flex; gap:2px; align-items:flex-end; height:42px; flex:1; }
+.b { background:#1a5080; border-radius:1px; }
+.bp-seat {
+  background:#F0F8FF;
+  border-radius:12px; padding:10px 14px;
+  text-align:center; flex-shrink:0;
+}
+.bp-seat-lbl { font-size:8px; font-weight:800; color:#90c0e0; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:2px; }
+.bp-seat-val { font-family:'Fredoka One',cursive; font-size:28px; color:#1a5080; line-height:1; }
+
+/* ═══════════════════════════
+   INFO CARDS
+═══════════════════════════ */
+.cards {
+  position:relative; z-index:5;
+  padding: 24px 20px;
+  display:flex; flex-direction:column; gap:12px;
+  max-width: 420px;
+  width:100%;
+  margin:0 auto;
+  animation: slideUp 0.8s cubic-bezier(0.22,1,0.36,1) 1.3s both;
+}
+
+.info-card {
+  border-radius:18px;
+  padding:16px 20px;
+  display:flex; align-items:center; gap:14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+  position:relative; overflow:hidden;
+}
+.info-card::after {
+  content:''; position:absolute; right:-10px; top:-10px;
+  width:50px; height:50px; border-radius:50%;
+  background:rgba(255,255,255,0.35);
+}
+.ic-icon { font-size:28px; flex-shrink:0; }
+.ic-lbl { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.12em; opacity:0.65; margin-bottom:2px; }
+.ic-val { font-size:17px; font-weight:900; line-height:1.2; }
+.ic-sub { font-size:12px; font-weight:700; opacity:0.65; margin-top:1px; }
+
+.c1 { background:linear-gradient(135deg,#FFD0BE,#FFB49A); color:#7A2A10; }
+.c2 { background:linear-gradient(135deg,#B8E4FA,#72C8F0); color:#0D4060; }
+.c3 { background:linear-gradient(135deg,#C2F0DC,#7DDBB4); color:#0D4030; }
+.c4 { background:linear-gradient(135deg,#FFCCE5,#FF8FC0); color:#6B0040; }
+
+/* ═══════════════════════════
+   MESSAGE CARD
+═══════════════════════════ */
+.msg-wrap {
+  position:relative; z-index:5;
+  padding:0 20px;
+  max-width:420px; width:100%;
+  margin:0 auto;
+  animation: slideUp 0.8s cubic-bezier(0.22,1,0.36,1) 1.5s both;
+}
+.msg-card {
+  background:linear-gradient(135deg, #FFE566, #FFB49A, #FF8FC0);
+  border-radius:24px;
+  padding:28px 24px;
+  text-align:center;
+  box-shadow:0 8px 32px rgba(255,120,100,0.2);
+  position:relative; overflow:hidden;
+}
+.msg-card::before {
+  content:''; position:absolute;
+  top:-24px; right:-24px;
+  width:80px; height:80px; border-radius:50%;
+  background:rgba(255,255,255,0.25);
+}
+.msg-card::after {
+  content:''; position:absolute;
+  bottom:-18px; left:-18px;
+  width:64px; height:64px; border-radius:50%;
+  background:rgba(255,255,255,0.2);
+}
+.msg-icon { font-size:36px; margin-bottom:10px; display:block; animation:wiggle 2s ease-in-out infinite 2.5s; }
+@keyframes wiggle {
+  0%,100% { transform:rotate(0deg); }
+  25%      { transform:rotate(-8deg); }
+  75%      { transform:rotate(8deg); }
+}
+.msg-text {
+  font-size:17px; font-weight:800;
+  color:#5A0020;
+  line-height:1.65; position:relative; z-index:1;
+}
+.msg-sig {
+  margin-top:14px;
+  font-family:'Fredoka One',cursive;
+  font-size:22px; color:#8B0040;
+  position:relative; z-index:1;
+}
+
+/* ═══════════════════════════
+   PHOTO SECTION
+═══════════════════════════ */
+.photo-section {
+  position: relative; z-index:5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 20px 4px;
+  animation: slideUp 0.8s cubic-bezier(0.22,1,0.36,1) 1.1s both;
+}
+.photo-frame-outer {
+  position: relative;
+  width: 152px; height: 152px;
+}
+/* Spinning rainbow border */
+.photo-frame-outer::before {
+  content:'';
+  position:absolute; inset:-4px;
+  border-radius:50%;
+  background: conic-gradient(
+    var(--pink) 0%,
+    var(--lemon) 20%,
+    var(--mint) 40%,
+    var(--sky) 60%,
+    var(--lilac) 80%,
+    var(--pink) 100%
+  );
+  animation: spinBorder 5s linear infinite;
+  z-index:0;
+}
+@keyframes spinBorder {
+  to { transform: rotate(360deg); }
+}
+/* White gap ring */
+.photo-frame-outer::after {
+  content:'';
+  position:absolute; inset:-1px;
+  border-radius:50%;
+  background: var(--cream);
+  z-index:1;
+}
+.photo-frame {
+  position:relative; z-index:2;
+  width:152px; height:152px;
+  border-radius:50%;
+  overflow:hidden;
+  background: linear-gradient(135deg,#FFD0E8,#B8E4FA);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  cursor:pointer;
+}
+.photo-frame img {
+  width:100%; height:100%;
+  object-fit:cover; display:block;
+}
+.photo-placeholder {
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:6px; padding:16px; text-align:center;
+}
+.photo-placeholder-icon { font-size:32px; }
+.photo-placeholder-text {
+  font-size:11px; font-weight:800;
+  color: #A05080;
+  text-transform:uppercase; letter-spacing:0.1em;
+  line-height:1.4;
+}
+.photo-caption {
+  margin-top:12px;
+  font-family:'Fredoka One',cursive;
+  font-size:18px;
+  background: linear-gradient(135deg, var(--coral), var(--pink));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+/* Hidden file input */
+#photo-input { display:none; }
+
+/* ═══════════════════════════
+   FOOTER SPACE
+═══════════════════════════ */
+.footer-space {
+  height: max(40px, env(safe-area-inset-bottom, 40px));
+}
+
+/* ═══════════════════════════
+   PLANE INTRO OVERLAY
+═══════════════════════════ */
+#plane-overlay {
+  position: fixed; inset:0; z-index: 100;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* The whole plane + trail unit moves across */
+#plane-unit {
+  position: absolute;
+  top: 45%;
+  left: 0;
+  transform: translateX(-110vw);
+  animation: planeAcross 100.4s cubic-bezier(0.4, 0, 0.2, 1) 0.0s forwards;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+@keyframes planeAcross {
+  0%   { transform: translateX(-130px) translateY(0px); }
+  30%  { transform: translateX(25vw)   translateY(-18px); }
+  60%  { transform: translateX(65vw)   translateY(8px); }
+  100% { transform: translateX(115vw)  translateY(-6px); }
+}
+
+/* Contrail */
+#plane-trail {
+  width: 180px; height: 10px;
+  position: relative;
+  margin-right: -4px;
+  flex-shrink: 0;
+}
+#plane-trail::before {
+  content:'';
+  position:absolute; inset:0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,255,255,0.0) 10%,
+    rgba(255,255,255,0.7) 60%,
+    rgba(255,255,255,0.95) 100%
+  );
+  border-radius:20px;
+  filter: blur(3px);
+}
+#plane-trail::after {
+  content:'';
+  position:absolute; top:50%; left:0; right:0;
+  height:2px; transform:translateY(-50%);
+  background: linear-gradient(90deg, transparent, rgba(180,220,255,0.8));
+  border-radius:10px;
+}
+
+/* The SVG plane */
+#plane-svg {
+  flex-shrink:0;
+  filter:
+    drop-shadow(-6px 6px 12px rgba(100,160,255,0.35))
+    drop-shadow(0 2px 6px rgba(0,0,0,0.12));
+  animation: planeBob 0.6s ease-in-out infinite alternate;
+}
+@keyframes planeBob {
+  from { transform: translateY(-2px) rotate(-1deg); }
+  to   { transform: translateY(2px)  rotate(1deg); }
+}
+
+/* Cloud puffs that fly past */
+.cloud-puff {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.75);
+  filter: blur(8px);
+  animation: cloudDrift var(--cdd,3s) ease-in var(--cddo,0s) forwards;
+  opacity:0;
+}
+@keyframes cloudDrift {
+  0%   { transform:translateX(-60vw); opacity:0; }
+  15%  { opacity:0.8; }
+  85%  { opacity:0.8; }
+  100% { transform:translateX(115vw); opacity:0; }
+}
+
+/* Fade overlay out after plane passes */
+#plane-overlay {
+  animation: overlayFade 0.5s ease-out 2.8s forwards;
+}
+@keyframes overlayFade {
+  to { opacity:0; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── PLANE INTRO ── -->
+<div id="plane-overlay" aria-hidden="true">
+
+  <!-- Cloud puffs -->
+  <div class="cloud-puff" style="width:120px;height:60px;top:28%;left:0;--cdd:3.2s;--cddo:0.2s"></div>
+  <div class="cloud-puff" style="width:80px;height:45px;top:44%;left:0;--cdd:2.8s;--cddo:0.6s"></div>
+  <div class="cloud-puff" style="width:100px;height:50px;top:22%;left:0;--cdd:3.5s;--cddo:1s"></div>
+
+  <!-- Plane unit: trail + SVG -->
+  <div id="plane-unit">
+    <div id="plane-trail"></div>
+
+    <!-- SVG plane — big, clear, with 2 windows for heads -->
+    <svg id="plane-svg" width="220" height="90" viewBox="0 0 220 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- ── FUSELAGE ── -->
+      <path d="M18 48 C18 38 26 30 60 28 L160 25 C185 24 205 32 210 44 C210 44 210 52 205 56 C200 60 185 62 160 61 L60 58 C26 56 18 58 18 48 Z"
+            fill="url(#bodyGrad)" stroke="white" stroke-width="1.2"/>
+
+      <!-- ── NOSE CONE ── -->
+      <path d="M160 25 C185 24 205 32 210 44 C205 44 195 40 175 38 L160 25Z"
+            fill="url(#noseGrad)"/>
+
+      <!-- ── COCKPIT WINDOWS ── -->
+      <ellipse cx="178" cy="39" rx="10" ry="7" fill="#B8E8FF" stroke="white" stroke-width="1"/>
+      <ellipse cx="178" cy="39" rx="6" ry="4" fill="#72C8F0" opacity="0.6"/>
+
+      <!-- ── MAIN WINDOWS (2 circles for heads) ── -->
+      <!-- Window 1 — left person -->
+      <circle cx="95" cy="42" r="13" fill="white" stroke="#C0D8F0" stroke-width="1.5"/>
+      <circle cx="95" cy="42" r="11" fill="#EEF7FF"/>
+      <!-- subtle person silhouette placeholder -->
+      <circle cx="95" cy="38" r="4.5" fill="#C0D0E8" opacity="0.5"/>
+      <path d="M87 50 Q95 44 103 50" fill="#C0D0E8" opacity="0.4"/>
+      <text x="95" y="56" font-size="8" text-anchor="middle" fill="#90B0D0" font-family="sans-serif" opacity="0.7">tú</text>
+
+      <!-- Window 2 — right person -->
+      <circle cx="130" cy="42" r="13" fill="white" stroke="#C0D8F0" stroke-width="1.5"/>
+      <circle cx="130" cy="42" r="11" fill="#EEF7FF"/>
+      <circle cx="130" cy="38" r="4.5" fill="#C0D0E8" opacity="0.5"/>
+      <path d="M122 50 Q130 44 138 50" fill="#C0D0E8" opacity="0.4"/>
+      <text x="130" y="56" font-size="8" text-anchor="middle" fill="#90B0D0" font-family="sans-serif" opacity="0.7">yo</text>
+
+      <!-- ── MAIN WING ── -->
+      <path d="M80 54 L65 82 L115 68 L120 54 Z"
+            fill="url(#wingGrad)" stroke="white" stroke-width="1"/>
+
+      <!-- Wing detail line -->
+      <path d="M82 56 L70 78 M95 61 L88 80" stroke="white" stroke-width="0.6" opacity="0.5"/>
+
+      <!-- ── TAIL FIN ── -->
+      <path d="M28 44 L18 20 L45 36 Z"
+            fill="url(#wingGrad)" stroke="white" stroke-width="1"/>
+
+      <!-- ── HORIZONTAL STABILIZERS ── -->
+      <path d="M32 50 L20 62 L50 56 L52 50 Z"
+            fill="url(#wingGrad)" stroke="white" stroke-width="0.8"/>
+      <path d="M32 46 L20 36 L50 42 L52 46 Z"
+            fill="url(#wingGrad)" stroke="white" stroke-width="0.8"/>
+
+      <!-- ── ENGINES ── -->
+      <rect x="90" y="62" width="30" height="12" rx="6"
+            fill="url(#engineGrad)" stroke="white" stroke-width="0.8"/>
+      <rect x="91" y="63" width="10" height="10" rx="5" fill="white" opacity="0.25"/>
+
+      <!-- ── BELLY STRIPE ── -->
+      <path d="M50 56 L155 56 Q165 56 168 54" stroke="url(#stripeGrad)" stroke-width="3" stroke-linecap="round"/>
+
+      <!-- ── GRADIENTS ── -->
+      <defs>
+        <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="#FFFFFF"/>
+          <stop offset="40%"  stop-color="#EEF6FF"/>
+          <stop offset="100%" stop-color="#C8E4FA"/>
+        </linearGradient>
+        <linearGradient id="noseGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"   stop-color="#EEF6FF"/>
+          <stop offset="100%" stop-color="#B8D8F0"/>
+        </linearGradient>
+        <linearGradient id="wingGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="#D0E8FF"/>
+          <stop offset="100%" stop-color="#90C0E8"/>
+        </linearGradient>
+        <linearGradient id="engineGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"   stop-color="#A0C8E8"/>
+          <stop offset="100%" stop-color="#C8E0F8"/>
+        </linearGradient>
+        <linearGradient id="stripeGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"   stop-color="#72C8F0"/>
+          <stop offset="100%" stop-color="#FF8FC0"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+</div>
+
+<!-- ── BACKGROUND ── -->
+<div class="bg" aria-hidden="true">
+  <div class="blob" style="width:260px;height:260px;background:#FFD0E8;top:-80px;left:-80px;opacity:.55;--d:9s;--tx:20px;--ty:15px;--sc:1.08"></div>
+  <div class="blob" style="width:220px;height:220px;background:#B8E4FA;top:60px;right:-60px;opacity:.5;--d:7s;--dl:1s;--tx:-18px;--ty:20px;--sc:1.06"></div>
+  <div class="blob" style="width:180px;height:180px;background:#C2F0DC;top:380px;left:-50px;opacity:.45;--d:11s;--dl:.5s;--tx:22px;--ty:-12px"></div>
+  <div class="blob" style="width:160px;height:160px;background:#FFF4A8;top:500px;right:-40px;opacity:.5;--d:8s;--dl:2s;--tx:-14px;--ty:18px"></div>
+  <div class="blob" style="width:140px;height:140px;background:#E4D5FF;top:750px;left:40%;opacity:.4;--d:6s;--dl:1.5s;--tx:10px;--ty:-16px"></div>
+  <!-- confetti dots -->
+  <div class="confetti-dot" style="width:8px;height:8px;background:#FFB49A;left:8%;--cd:7s;--cdl:0s"></div>
+  <div class="confetti-dot" style="width:6px;height:6px;background:#72C8F0;left:22%;--cd:9s;--cdl:1.2s"></div>
+  <div class="confetti-dot" style="width:10px;height:10px;background:#FFE566;left:45%;--cd:6s;--cdl:2s"></div>
+  <div class="confetti-dot" style="width:7px;height:7px;background:#7DDBB4;left:62%;--cd:8s;--cdl:0.5s"></div>
+  <div class="confetti-dot" style="width:9px;height:9px;background:#FF8FC0;left:78%;--cd:10s;--cdl:3s"></div>
+  <div class="confetti-dot" style="width:6px;height:6px;background:#C09AFF;left:90%;--cd:7.5s;--cdl:1.8s"></div>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <span class="hero-emoji">🎂</span>
+  <h1>¡Feliz<br>Cumpleaños!</h1>
+  <p class="h1-line2">✈️ Nos vamos a... Mallorca!!</p>
+  <p class="tagline">Tu regalo está aquí abajo 👇</p>
+  <div class="emoji-row">🌸 ☀️ 🏖️ 🌊 🍹</div>
+</section>
+
+<!-- ── WALLET / BOARDING PASS ── -->
+<section class="wallet-scene">
+  <p class="wallet-label">NUESTRO BILLETE DE AVIÓN</p>
+
+  <div class="bp-outer">
+    <div class="bp-back bp-back-1"></div>
+    <div class="bp-back bp-back-2"></div>
+
+    <div class="bp">
+      <!-- Header -->
+      <div class="bp-head">
+        <span class="bp-airline">Ryanair</span>
+        <span class="bp-plane-anim">✈️</span>
+        <span class="bp-badge">VIP</span>
+      </div>
+
+      <!-- Route -->
+      <div class="bp-route">
+        <div class="bp-city-block">
+          <div class="bp-iata">MAD</div>
+          <div class="bp-city-name">Madrid</div>
+        </div>
+        <div class="bp-route-center">
+          <div class="bp-plane-row">
+            <div class="bp-circle"></div>
+            <div class="bp-dash"></div>
+            <span class="bp-route-plane">✈</span>
+            <div class="bp-dash"></div>
+            <div class="bp-circle"></div>
+          </div>
+          <div class="bp-dur">1h 15min</div>
+        </div>
+        <div class="bp-city-block right">
+          <div class="bp-iata">PMI</div>
+          <div class="bp-city-name">Mallorca</div>
+        </div>
+      </div>
+
+      <!-- Fields -->
+      <div class="bp-fields">
+        <div class="bp-field">
+          <div class="bp-field-lbl">Salida</div>
+          <div class="bp-field-val">16 JUL</div>
+          <div class="bp-field-val">05:50h</div>
+        </div>
+        <div class="bp-field">
+          <div class="bp-field-lbl">Regreso</div>
+          <div class="bp-field-val">21 JUL</div>
+          <div class="bp-field-val">20:10h</div>
+        </div>
+        <div class="bp-field">
+          <div class="bp-field-lbl">Noches</div>
+          <div class="bp-field-val">5 🌙</div>
+        </div>
+      </div>
+
+      <!-- Tear -->
+      <div class="bp-tear">
+        <div class="bp-notch l"></div>
+        <div class="bp-dash-line"></div>
+        <div class="bp-notch r"></div>
+      </div>
+
+      <!-- Barcode -->
+      <div class="bp-barcode-area">
+        <div class="bp-bars" id="bars"></div>
+        <div class="bp-seat">
+          <div class="bp-seat-lbl">Asiento</div>
+          <div class="bp-seat-val">14A</div>
+          <div class="bp-seat-val" style="font-size: 0.5em;">(ventanilla para Carlos)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PHOTO ── -->
+<div class="photo-section">
+  <input type="file" id="photo-input" accept="image/*">
+  <div class="photo-frame-outer">
+    <div class="photo-frame" id="photo-frame" onclick="document.getElementById('photo-input').click()">
+      <img src="img/foto1.JPG" alt="foto" style="width: 100%; height: 100%; object-fit: cover;">
+    </div>
+  </div>
+  <p class="photo-caption">Una aventura más 💕</p>
+</div>
+
+<!-- ── INFO CARDS ── -->
+<div class="cards">
+  <div class="info-card c1">
+    <span class="ic-icon">✈️</span>
+    <div>
+      <div class="ic-lbl">Ruta</div>
+      <div class="ic-val">Madrid → Palma de Mallorca</div>
+    </div>
+  </div>
+  <div class="info-card c2">
+    <span class="ic-icon">📅</span>
+    <div>
+      <div class="ic-lbl">Fechas</div>
+      <div class="ic-val">16 – 21 de Julio</div>
+      <div class="ic-sub">5 noches en el paraíso</div>
+    </div>
+  </div>
+  <div class="info-card c3">
+    <span class="ic-icon">🏝️</span>
+    <div>
+      <div class="ic-lbl">Destino</div>
+      <div class="ic-val">Palma de Mallorca</div>
+      <div class="ic-sub">Mar Mediterráneo ☀️</div>
+    </div>
+  </div>
+  <div class="info-card c4">
+    <span class="ic-icon">👫</span>
+    <div>
+      <div class="ic-lbl">Viajeros</div>
+      <div class="ic-val">Tú y yo 💕</div>
+      <div class="ic-sub">Los dos solos</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MESSAGE ── -->
+<div class="msg-wrap">
+  <div class="msg-card">
+    <span class="msg-icon">💌</span>
+    <p class="msg-text">
+      Porque te mereces el sol,<br>
+      el mar, y los mejores días<br>
+      del verano a mi lado.<br>
+      <br>
+      ¡Feliz cumpleaños, amor! 🎉
+    </p>
+    <div class="msg-sig">con todo mi amor ♡</div>
+  </div>
+</div>
+
+<div class="footer-space"></div>
+
+<script>
+// Generate barcode bars
+const wrap = document.getElementById('bars');
+const pattern = [2,1,3,1,2,3,1,2,1,3,2,1,3,1,1,2,3,1,2,1,3,1,2,2,1,3,1,1,2,1,3,2,1,3,1,2,1,3,2,1,1,2,3];
+pattern.forEach(h => {
+  const b = document.createElement('div');
+  b.className = 'b';
+  b.style.height = (h * 10 + 6) + 'px';
+  b.style.width  = (Math.random() > 0.55 ? 3 : 2) + 'px';
+  wrap.appendChild(b);
+});
+
+// Photo upload
+document.getElementById('photo-input').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const frame = document.getElementById('photo-frame');
+    const placeholder = document.getElementById('photo-placeholder');
+    placeholder.style.display = 'none';
+    // Remove old img if any
+    const old = frame.querySelector('img');
+    if (old) old.remove();
+    const img = document.createElement('img');
+    img.src = ev.target.result;
+    frame.appendChild(img);
+  };
+  reader.readAsDataURL(file);
+});
+// on scroll-ish (they're probably already visible on mobile)
+document.querySelectorAll('.info-card').forEach((card, i) => {
+  card.style.animationDelay = (1.3 + i * 0.1) + 's';
+  card.style.animation = 'slideUp 0.6s cubic-bezier(0.22,1,0.36,1) both';
+  card.style.opacity = '0';
+  setTimeout(() => { card.style.opacity = ''; }, (1300 + i * 100));
+});
+</script>
+
+</body>
+</html>
